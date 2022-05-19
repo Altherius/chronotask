@@ -39,7 +39,8 @@
 </script>
 
 <main>
-	<h1>Chronotask</h1>
+	<h1 class="text-center">Chronotask</h1>
+	<hr>
 
 	<div>
 		<input bind:value={name} type="text" id="taskName" placeholder="What to do ?">
@@ -57,21 +58,21 @@
 		</button>
 	</div>
 
-
-	{#if tasks}
+	{#if tasks.length > 0}
 		<ul>
 			{#each tasks as task}
 				<li>
-					{task.name} - <Timer duration="{task.duration}" />
+					{task.name} <Timer duration="{task.duration}" />
 				</li>
 			{/each}
 		</ul>
 
 	{:else}
-		You have nothing to do, add something!
+		<p>
+			You have nothing to do, add something!
+		</p>
 	{/if}
 </main>
 
 <style>
-
 </style>
