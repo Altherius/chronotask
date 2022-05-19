@@ -1,5 +1,6 @@
 <script lang="ts">
 
+	import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 	import Timer from './Timer.svelte'
 
 	let tasks = []
@@ -39,39 +40,55 @@
 </script>
 
 <main>
-	<h1 class="text-center">Chronotask</h1>
-	<hr>
+	<div class="container-fluid">
+		<h1 class="text-center">Chronotask</h1>
+		<hr>
 
-	<div>
-		<input bind:value={name} type="text" id="taskName" placeholder="What to do ?">
-		<input bind:value={duration} type="number" id="taskDuration" placeholder="5">
-		<button type="button" on:click={addTask}>Add task</button>
+		<div>
+			<h2 class="text-center">Add a task!</h2>
+			<div class="row">
+				<div class="col">
+					<input class="form-control" bind:value={name} type="text" id="taskName" placeholder="What to do ?">
+				</div>
+				<div class="col">
+					<input class="form-control" bind:value={duration} type="number" id="taskDuration" placeholder="5">
+				</div>
+			</div>
+
+			<div class="text-center mt-3">
+				<button class="btn btn-outline-primary" type="button" on:click={addTask}>Add task</button>
+			</div>
+		</div>
+
+		<div>
+			<h2 class="text-center">Timer</h2>
+			<div class="text-center">
+				<button class="btn btn-outline-primary" type="button" on:click={toggleTimer} >
+					{#if timerTicking}
+						Pause timer
+					{:else}
+						Start timer
+					{/if}
+				</button>
+			</div>
+		</div>
+
+		<h2 class="text-center">Task list</h2>
+		{#if tasks.length > 0}
+			<ul class="list-group">
+				{#each tasks as task}
+					<li class="list-group-item">
+						{task.name} <Timer duration="{task.duration}" />
+					</li>
+				{/each}
+			</ul>
+
+		{:else}
+			<p>
+				You have nothing to do, add something!
+			</p>
+		{/if}
 	</div>
-
-	<div>
-		<button type="button" on:click={toggleTimer} >
-			{#if timerTicking}
-				Pause timer
-			{:else}
-				Start timer
-			{/if}
-		</button>
-	</div>
-
-	{#if tasks.length > 0}
-		<ul>
-			{#each tasks as task}
-				<li>
-					{task.name} <Timer duration="{task.duration}" />
-				</li>
-			{/each}
-		</ul>
-
-	{:else}
-		<p>
-			You have nothing to do, add something!
-		</p>
-	{/if}
 </main>
 
 <style>
