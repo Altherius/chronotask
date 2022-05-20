@@ -3,19 +3,36 @@
 	import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 	import Fa from 'svelte-fa/src/fa.svelte'
 	import Timer from './Timer.svelte'
-	import {faClock, faPause, faPlay, faPlus} from "@fortawesome/free-solid-svg-icons";
+	import {faClock, faPause, faPlay, faPlus, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+	import Moment from "moment";
 
 	let tasks = []
-	let name:String = "Something awesome!"
-	let duration:Number = 10
-	let timerTicking = false
+	let name:String = "Something new"
+	let durationString:String = "00:00:00"
+	let timerTicking:Boolean = false
 	let ticker = null;
 
 	function addTask() {
+
+		let durationObject = Moment(durationString, 'HH:mm:ss');
+
+		let duration = (durationObject.hours() * 3600) + (durationObject.minutes() * 60) + durationObject.seconds()
+
 		tasks = [...tasks, {
 			name: name ?? "Some task",
 			duration: duration ?? 5
 		}]
+
+		name = "Something else"
+		durationString = "00:00:00"
+	}
+
+	function removeTask(task) {
+		let index = tasks.indexOf(task)
+		if (index > -1) {
+			tasks.splice(index, 1)
+		}
+		tasks = tasks
 	}
 
 	function toggleTimer() {
@@ -43,7 +60,8 @@
 
 <main>
 	<div class="container-fluid">
-		<h1 class="text-center">Chronotask</h1>
+		<h1 class="text-center mt-3">Chronotask</h1>
+
 		<hr>
 
 		<div>
@@ -57,7 +75,7 @@
 									<input class="form-control" bind:value={name} type="text" id="taskName" placeholder="What to do ?">
 								</div>
 								<div class="col">
-									<input class="form-control" bind:value={duration} type="number" id="taskDuration" placeholder="5">
+									<input class="form-control" bind:value={durationString} type="text" id="taskDuration" placeholder="5">
 								</div>
 							</div>
 
@@ -95,6 +113,8 @@
 
 		</div>
 
+		<hr>
+
 
 		<h2 class="text-center mt-4">Task list</h2>
 		{#if tasks.length > 0}
@@ -107,6 +127,7 @@
 							<Fa icon="{faClock}"></Fa>
 							<Timer duration="{task.duration}" />
 						</h4>
+						<button on:click={() => removeTask(task)} class="btn btn-outline-danger"><Fa icon="{faTimesCircle}"></Fa> Delete task</button>
 					</li>
 				{/each}
 			</ul>
