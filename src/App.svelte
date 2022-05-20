@@ -5,6 +5,8 @@
 	import Timer from './Timer.svelte'
 	import {faClock, faPause, faPlay, faPlus, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 	import Moment from "moment";
+	import {sendNotification} from "@tauri-apps/api/notification";
+
 
 	let tasks = []
 	let name:String = "Something new"
@@ -43,6 +45,7 @@
 				if (tasks.length > 0) {
 					tasks[0].duration -= 1
 					if (tasks[0].duration === 0) {
+						sendNotification(tasks[0].name + " is due!")
 						tasks.shift()
 					}
 				}
