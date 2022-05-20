@@ -1,7 +1,9 @@
 <script lang="ts">
 
 	import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+	import Fa from 'svelte-fa/src/fa.svelte'
 	import Timer from './Timer.svelte'
+	import {faClock, faPause, faPlay, faPlus} from "@fortawesome/free-solid-svg-icons";
 
 	let tasks = []
 	let name:String = "Something awesome!"
@@ -45,48 +47,74 @@
 		<hr>
 
 		<div>
-			<h2 class="text-center">Add a task!</h2>
 			<div class="row">
-				<div class="col">
-					<input class="form-control" bind:value={name} type="text" id="taskName" placeholder="What to do ?">
+				<div class="col-6">
+					<div class="card">
+						<div class="card-body">
+							<h2 class="text-center card-title">Add a task!</h2>
+							<div class="row">
+								<div class="col">
+									<input class="form-control" bind:value={name} type="text" id="taskName" placeholder="What to do ?">
+								</div>
+								<div class="col">
+									<input class="form-control" bind:value={duration} type="number" id="taskDuration" placeholder="5">
+								</div>
+							</div>
+
+							<hr>
+
+							<div class="text-center">
+								<button class="btn btn-outline-primary" type="button" on:click={addTask}>
+									<Fa icon="{faPlus}"></Fa>
+									Add task
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="col">
-					<input class="form-control" bind:value={duration} type="number" id="taskDuration" placeholder="5">
+
+				<div class="col-6">
+					<div class="card">
+						<div class="card-body">
+							<h2 class="card-title text-center">Timer</h2>
+							<div class="text-center">
+								<button class="btn btn-outline-primary" type="button" on:click={toggleTimer} >
+									{#if timerTicking}
+										<Fa icon="{faPause}"></Fa>
+										Pause timer
+									{:else}
+										<Fa icon="{faPlay}"></Fa>
+										Start timer
+									{/if}
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="text-center mt-3">
-				<button class="btn btn-outline-primary" type="button" on:click={addTask}>Add task</button>
-			</div>
 		</div>
 
-		<div>
-			<h2 class="text-center">Timer</h2>
-			<div class="text-center">
-				<button class="btn btn-outline-primary" type="button" on:click={toggleTimer} >
-					{#if timerTicking}
-						Pause timer
-					{:else}
-						Start timer
-					{/if}
-				</button>
-			</div>
-		</div>
 
-		<h2 class="text-center">Task list</h2>
+		<h2 class="text-center mt-4">Task list</h2>
 		{#if tasks.length > 0}
 			<ul class="list-group">
-				{#each tasks as task}
-					<li class="list-group-item">
-						{task.name} <Timer duration="{task.duration}" />
+				{#each tasks as task, i}
+
+					<li class="list-group-item {i === 0 ? 'list-group-item-primary' : ''}">
+						<h3 class="display-5">{task.name}</h3>
+						<h4>
+							<Fa icon="{faClock}"></Fa>
+							<Timer duration="{task.duration}" />
+						</h4>
 					</li>
 				{/each}
 			</ul>
 
 		{:else}
-			<p>
+			<div class="d-block alert alert-primary text-center">
 				You have nothing to do, add something!
-			</p>
+			</div>
 		{/if}
 	</div>
 </main>
